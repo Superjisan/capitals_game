@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capitals Game</title>
+</head>
+<body>
+    <h1>Capitals Game</h1>
+    <p>Welcome to the Capitals Game! Test your knowledge of world capitals.</p>
+    <!-- The game interface will be implemented here -->
+    <!-- First start out with one country and ask the user for the capital -->
+    <div id="game-container">
+        <p id="country"></p>
+        <input type="text" id="answer" placeholder="Enter the capital">
+        <button id="submit">Submit</button>
+        <p id="feedback">
+            
+        </p>
+        <p id="score">
+            Score: <span id="score-value">0</span>
+        </p>
+        <p id="progress">
+            Progress: <span id="progress-value">0</span> / <span id="total-countries">0</span>
+        </p>
+    </div>
+    <script type="module" src="./capitals_game.js"></script>
+</body>
+</html>     
