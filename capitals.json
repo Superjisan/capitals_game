@@ -192,7 +192,7 @@
   "Ukraine": ["Kyiv", "Kiev"],
   "United Arab Emirates": "Abu Dhabi",
   "United Kingdom": "London",
-  "United States": "Washington D.C.",
+  "United States": ["Washington D.C.", "Washington DC"],
   "Uruguay": "Montevideo",
   "Uzbekistan": "Tashkent",
   "Vanuatu": "Port Vila",
