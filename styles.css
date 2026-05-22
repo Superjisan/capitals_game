@@ -1,0 +1,25 @@
+#answer {
+    width: 20rem;
+    font-size: 1rem;
+    height: 2rem;
+}
+
+#submit {
+    height: 2rem;
+    color: white;
+    background-color: blue;
+}
+
+#answers-table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+}
+
+#answers-table tr {
+    border: 1px solid black;
+}
+
+#answers-table tr th, #answers-table tr td {
+    border: 1px solid black;
+    padding: 0.5rem;
+}
