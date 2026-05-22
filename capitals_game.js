@@ -2,6 +2,7 @@ import capitals from './capitals.json' with { type: 'json' };
 
 let score = 0;
 let countriesPlayed = [];
+const countriesLeft = structuredClone(capitals);
 let numCountries = Object.keys(capitals).length;
 
 export function getCorrectAnswer(country, answer) {
@@ -10,7 +11,6 @@ export function getCorrectAnswer(country, answer) {
   if (Array.isArray(correctCapital)) {
     correctAnswer = correctCapital.map((v) => v.toLowerCase()).includes(answer.toLowerCase());
   } else {
-    console.log(`Correct capital: ${correctCapital}, User answer: ${answer}`);
     correctAnswer = correctCapital.toLowerCase() === answer.toLowerCase();
   }
   return correctAnswer;
@@ -25,6 +25,10 @@ export function checkAnswer() {
     incrementScore();
   }
   countriesPlayed.push(country);
+  // update countriesLeft
+  delete countriesLeft[country];
+
+  // update html with feedback and score
   document.getElementById('progress-value').innerText = countriesPlayed.length;
   const correctCapitalText = Array.isArray(correctCapital) ? `one of these: ${correctCapital.join(', ')}` : `${correctCapital}`;
   const correctAnswerText = `The capital of ${country} is ${correctCapitalText}`;
@@ -53,6 +57,7 @@ export function addCountryAnswerToHTML(country, answer) {
   trElem.appendChild(capitalTd);
   tbodyElem.appendChild(trElem);
 
+  console.log(`Country: ${country}, User answer: ${answer}, Correct capital(s): ${capitals[country]}`);
   const correctAnswer = getCorrectAnswer(country, answer);
   trElem.style.backgroundColor = correctAnswer ? 'lightgreen' : 'lightcoral';
   const resultTd = document.createElement('td');
@@ -69,7 +74,7 @@ export function getCapital(country) {
 }
 
 export function getRandomCountry() {
-  const countries = Object.keys(capitals);
+  const countries = Object.keys(countriesLeft);
   const randomIndex = Math.floor(Math.random() * countries.length);
   return countries[randomIndex];
 }
