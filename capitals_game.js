@@ -8,19 +8,23 @@ export function checkAnswer() {
   const answer = document.getElementById('answer').value.trim();
   const country = document.getElementById('country').innerText;
   const correctCapital = capitals[country];
+  let correctAnswer = correctCapital;
   if (Array.isArray(correctCapital)) {
-    return correctCapital.includes(answer);
+    correctAnswer = correctCapital.map((v) => v.toLowerCase()).includes(answer.toLowerCase());
+  } else {
+    console.log(`Correct capital: ${correctCapital}, User answer: ${answer}`);
+    correctAnswer = correctCapital.toLowerCase() === answer.toLowerCase();
   }
-  console.log(`Correct capital: ${correctCapital}, User answer: ${answer}`);
-  const correctAnswer = correctCapital.toLowerCase() === answer.toLowerCase();
   if (correctAnswer) {
     incrementScore();
   }
   countriesPlayed.push(country);
   document.getElementById('progress-value').innerText = countriesPlayed.length;
-  const correctAnswerText = `The capital of ${country} is ${correctCapital}.`;
-  document.getElementById('feedback').innerText = correctAnswer ? `Correct! ${correctAnswerText}` : `Wrong! ${correctAnswerText}`;
+  const correctAnswerText = `The capital of ${country} is ${correctCapital}`;
+  const yourAnswerText = `Your answer: ${answer}`;
+  document.getElementById('feedback').innerText = correctAnswer ? `Correct! ${correctAnswerText}.` : `Wrong! ${correctAnswerText}. ${yourAnswerText}`;
   document.getElementById('score').innerText = `Score: ${getScore()}`;
+  document.getElementById('answer').value = '';
   return playGame();
 }
 
