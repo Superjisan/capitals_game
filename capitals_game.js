@@ -1,8 +1,13 @@
 import capitals from './capitals.json' with { type: 'json' };
+import africaCapitals from './africa_capitals.json' with { type: 'json' };
+import asiaCapitals from './asia_capitals.json' with { type: 'json' };
+import europeCapitals from './europe_capitals.json' with { type: 'json' };
+import northAmericaCapitals from './north_america_capitals.json' with { type: 'json' };
+import southAmericaCapitals from './south_america_capitals.json' with { type: 'json' };
 
 let score = 0;
 let countriesPlayed = [];
-const countriesLeft = structuredClone(capitals);
+let countriesLeft = structuredClone(capitals);
 let numCountries = Object.keys(capitals).length;
 
 export function getCorrectAnswer(country, answer) {
@@ -17,6 +22,10 @@ export function getCorrectAnswer(country, answer) {
 }
 
 export function checkAnswer() {
+  if (countriesPlayed.length >= numCountries) {
+    document.getElementById('feedback').innerText = 'Game over! You have played all countries for this setting.';
+    return;
+  }
   const answer = document.getElementById('answer').value.trim();
   const country = document.getElementById('country').innerText;
   const correctCapital = capitals[country];
@@ -81,15 +90,23 @@ export function getRandomCountry() {
 
 export function playGame() {
   const country = getRandomCountry();
-  if (countriesPlayed.includes(country)) {
+  if (countriesPlayed.includes(country) && countriesPlayed.length < numCountries) {
     return playGame(); // Skip if the country has already been played
+  } else if (countriesPlayed.length >= numCountries) {
+    document.getElementById('feedback').innerText = 'Game over! You have played all countries.';
+    return;
   }
   // add the country to html
   document.getElementById('country').innerText = country;
   return country;
 }
 
-export function resetGame() {
+export function resetGame(capitalsToUse = capitals) {
+  score = 0;
+  countriesPlayed = [];
+  countriesLeft = structuredClone(capitalsToUse);
+  numCountries = Object.keys(capitalsToUse).length;
+
   score = 0;
   countriesPlayed = [];
   document.getElementById('score').innerText = `Score: ${getScore()}`;
@@ -106,6 +123,13 @@ export function getScore() {
   return score;
 }
 
+export function removeActiveClassFromContinentButtons() {
+  const buttons = document.getElementsByClassName('continent-btn');
+  for (let button of buttons) {
+    button.classList.remove('active');
+  }
+}
+
 resetGame();
 playGame();
 document.getElementById('answer').addEventListener("keydown", function(event) {
@@ -115,3 +139,48 @@ document.getElementById('answer').addEventListener("keydown", function(event) {
   }
 });
 document.getElementById('submit').addEventListener('click', checkAnswer);
+
+// button listeners for continents
+document.getElementById('africa').addEventListener('click', () => {
+  resetGame(africaCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('africa').classList.add('active');
+  playGame();
+});
+document.getElementById('asia').addEventListener('click', () => {
+  resetGame(asiaCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('asia').classList.add('active');
+  playGame();
+});
+document.getElementById('europe').addEventListener('click', () => {
+  resetGame(europeCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('europe').classList.add('active');
+  playGame();
+});
+document.getElementById('north-america').addEventListener('click', () => {
+  resetGame(northAmericaCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('north-america').classList.add('active');
+  playGame();
+});
+document.getElementById('south-america').addEventListener('click', () => {
+  resetGame(southAmericaCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('south-america').classList.add('active');
+  playGame();
+});
+document.getElementById('world').addEventListener('click', () => {
+  resetGame(capitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('world').classList.add('active');
+  playGame();
+});
+document.getElementById('oceania').addEventListener('click', () => {
+  resetGame(oceaniaCapitals);
+  removeActiveClassFromContinentButtons();
+  document.getElementById('oceania').classList.add('active');
+  playGame();
+});
+
