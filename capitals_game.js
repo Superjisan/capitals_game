@@ -11,6 +11,14 @@ let countriesPlayed = [];
 let countriesLeft = structuredClone(capitals);
 let numCountries = Object.keys(capitals).length;
 
+const capitalsDataList = Object.values(capitals).flat();
+const datalistElem = document.getElementById('capitals-list');
+capitalsDataList.forEach((capital) => {
+  const optionElem = document.createElement('option');
+  optionElem.value = capital;
+  datalistElem.appendChild(optionElem);
+});
+
 export function getCorrectAnswer(country, answer) {
   const correctCapital = capitals[country];
   let correctAnswer = correctCapital;
@@ -24,7 +32,7 @@ export function getCorrectAnswer(country, answer) {
 
 export function checkAnswer() {
   if (countriesPlayed.length >= numCountries) {
-    document.getElementById('feedback').innerText = 'Game over! You have played all countries for this setting.';
+    gameOverFeedback();
     return;
   }
   const answer = document.getElementById('answer').value.trim();
@@ -89,12 +97,17 @@ export function getRandomCountry() {
   return countries[randomIndex];
 }
 
+export function gameOverFeedback() {
+  const yourScoreText = `Your final score is ${getScore()} out of ${numCountries}.`;
+  document.getElementById('feedback').innerText = `Game over! You have played all countries for this setting. ${yourScoreText}`;
+}
+
 export function playGame() {
   const country = getRandomCountry();
   if (countriesPlayed.includes(country) && countriesPlayed.length < numCountries) {
     return playGame(); // Skip if the country has already been played
   } else if (countriesPlayed.length >= numCountries) {
-    document.getElementById('feedback').innerText = 'Game over! You have played all countries.';
+    gameOverFeedback();
     return;
   }
   // add the country to html
