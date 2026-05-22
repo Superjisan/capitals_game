@@ -42,7 +42,10 @@ export function checkAnswer() {
   // add the country and correct answer to the table
   addCountryAnswerToHTML(country, answer);
   // reset the answer input and play the next country
-  document.getElementById('answer').value = '';
+  const input = document.getElementById('answer');
+  input.value = '';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new Event('change', { bubbles: true }));
   return playGame();
 }
 
