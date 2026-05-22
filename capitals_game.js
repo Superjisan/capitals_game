@@ -114,6 +114,12 @@ export function resetGame(capitalsToUse = capitals) {
   document.getElementById('progress-value').innerText = countriesPlayed.length;
   document.getElementById('total-countries').innerText = numCountries;
 
+  // clear the table of previous answers
+  const tbodyElem = document.getElementById('answers-body');
+  while (tbodyElem.firstChild) {
+    tbodyElem.removeChild(tbodyElem.firstChild);
+  }
+
 }
 
 export function incrementScore() {
