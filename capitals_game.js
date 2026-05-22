@@ -4,6 +4,7 @@ import asiaCapitals from './asia_capitals.json' with { type: 'json' };
 import europeCapitals from './europe_capitals.json' with { type: 'json' };
 import northAmericaCapitals from './north_america_capitals.json' with { type: 'json' };
 import southAmericaCapitals from './south_america_capitals.json' with { type: 'json' };
+import oceaniaCapitals from './oceania_capitals.json' with { type: 'json' };
 
 let score = 0;
 let countriesPlayed = [];
