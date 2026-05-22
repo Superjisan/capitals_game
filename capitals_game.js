@@ -21,13 +21,6 @@ export function checkAnswer() {
   const country = document.getElementById('country').innerText;
   const correctCapital = capitals[country];
   const correctAnswer = getCorrectAnswer(country, answer);
-  // let correctAnswer = correctCapital;
-  // if (Array.isArray(correctCapital)) {
-  //   correctAnswer = correctCapital.map((v) => v.toLowerCase()).includes(answer.toLowerCase());
-  // } else {
-  //   console.log(`Correct capital: ${correctCapital}, User answer: ${answer}`);
-  //   correctAnswer = correctCapital.toLowerCase() === answer.toLowerCase();
-  // }
   if (correctAnswer) {
     incrementScore();
   }

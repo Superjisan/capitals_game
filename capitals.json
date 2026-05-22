@@ -72,7 +72,7 @@
   "Germany": "Berlin",
   "Ghana": "Accra",
   "Greece": "Athens",
-  "Grenada": "Saint George's",
+  "Grenada": ["Saint George's", "St. George's", "Saint Georges", "St. Georges", "St Georges"],
   "Guatemala": "Guatemala City",
   "Guinea": "Conakry",
   "Guinea-Bissau": "Bissau",
