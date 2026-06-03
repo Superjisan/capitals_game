@@ -30,12 +30,15 @@ export function getCorrectAnswer(country, answer) {
   return correctAnswer;
 }
 
-export function checkAnswer() {
+export function checkAnswer(skipped = false) {
   if (countriesPlayed.length >= numCountries) {
     gameOverFeedback();
     return;
   }
-  const answer = document.getElementById('answer').value.trim();
+  let answer = document.getElementById('answer').value.trim();
+  if (skipped) {
+    answer = 'Skipped'; // Set answer to empty string if skipped, so it will be marked as wrong and not increment score
+  }
   const country = document.getElementById('country').innerText;
   const correctCapital = capitals[country];
   const correctAnswer = getCorrectAnswer(country, answer);
@@ -159,6 +162,9 @@ document.getElementById('answer').addEventListener("keydown", function(event) {
   }
 });
 document.getElementById('submit').addEventListener('click', checkAnswer);
+document.getElementById('skip').addEventListener('click', () => {
+  checkAnswer(true); // Pass true to indicate the question was skipped
+});
 
 // button listeners for continents
 document.getElementById('africa').addEventListener('click', () => {
