@@ -1,11 +1,12 @@
 {
   "short_name": "Capitals Game",
   "name": "Capitals Game",
-  "start_url": "/",
+  "start_url": "/capitals_game/",
+  "scope": "/capitals_game/",
   "display": "standalone",
   "icons": [
     {
-      "src": "android-chrome-192x192.png",
+      "src": "capitals_game/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
