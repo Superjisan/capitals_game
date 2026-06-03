@@ -36,7 +36,7 @@ export function checkAnswer(skipped = false) {
     return;
   }
   let answer = document.getElementById('answer').value.trim();
-  if (skipped) {
+  if (skipped === true) {
     answer = 'Skipped'; // Set answer to empty string if skipped, so it will be marked as wrong and not increment score
   }
   const country = document.getElementById('country').innerText;
@@ -210,6 +210,7 @@ document.getElementById('oceania').addEventListener('click', () => {
   playGame();
 });
 
+// TO be able to install it as a PWA, we need to register a service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/capitals_game/sw.js')
@@ -217,3 +218,6 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('Registration failed: ', err));
   });
 }
+
+
+// Share score functionality
