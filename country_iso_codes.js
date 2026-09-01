@@ -45,3 +45,13 @@ export const COUNTRY_ISO_CODES = {
   "Vanuatu": "vu", "Vatican City": "va", "Venezuela": "ve", "Vietnam": "vn", "Wales": "gb",
   "Yemen": "ye", "Zambia": "zm", "Zimbabwe": "zw",
 };
+
+// flagcdn.com has no ISO code for these; worldflags.net serves their flags directly
+// by name slug at assets/img/flags/{slug}-flag.png. No map/outline exists for these.
+export const FALLBACK_FLAG_SLUGS = {
+  "Federated States of Micronesia": "micronesia",
+  "Kosovo": "kosovo",
+  "Marshall Islands": "marshall-islands",
+  "Palestine": "palestine",
+  "Tuvalu": "tuvalu",
+};

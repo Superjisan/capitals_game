@@ -5,7 +5,7 @@ import europeCapitals from './data/europe_capitals.json' with { type: 'json' };
 import northAmericaCapitals from './data/north_america_capitals.json' with { type: 'json' };
 import southAmericaCapitals from './data/south_america_capitals.json' with { type: 'json' };
 import oceaniaCapitals from './data/oceania_capitals.json' with { type: 'json' };
-import { COUNTRY_ISO_CODES } from './country_iso_codes.js';
+import { COUNTRY_ISO_CODES, FALLBACK_FLAG_SLUGS } from './country_iso_codes.js';
 
 export function updateCountryMap(country) {
   const mapElem = document.getElementById('country-map');
@@ -21,11 +21,17 @@ export function updateCountryMap(country) {
 export function updateCountryFlag(country) {
   const flagElem = document.getElementById('country-flag');
   const isoCode = COUNTRY_ISO_CODES[country];
-  if (!isoCode) {
+  if (isoCode) {
+    flagElem.src = `https://flagcdn.com/${isoCode}.svg`;
+    flagElem.hidden = false;
+    return;
+  }
+  const fallbackSlug = FALLBACK_FLAG_SLUGS[country];
+  if (!fallbackSlug) {
     flagElem.hidden = true;
     return;
   }
-  flagElem.src = `https://flagcdn.com/${isoCode}.svg`;
+  flagElem.src = `https://worldflags.net/assets/img/flags/${fallbackSlug}-flag.png`;
   flagElem.hidden = false;
 }
 
