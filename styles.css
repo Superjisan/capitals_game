@@ -8,16 +8,61 @@
     height: 2rem;
     color: white;
     background-color: blue;
-    width: 100%;
-    margin: 0.5rem 0;
+    flex: 1 1 8rem;
+    max-width: 10rem;
 }
 
 #skip {
     height: 2rem;
     color: white;
     background-color: gray;
+    flex: 1 1 8rem;
+    max-width: 10rem;
+}
+
+#buttons-div {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+#continent-buttons {
     width: 100%;
-    margin: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+#country {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#country-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+#country-map {
+    width: 12rem;
+    height: 12rem;
+    object-fit: contain;
+}
+
+#country-flag {
+    width: 8rem;
+    height: 5.3rem;
+    object-fit: contain;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
 }
 
 #input-div {
@@ -25,10 +70,6 @@
     display: flex;
     justify-content: center;
     margin: 1rem 0;
-}
-
-#answer {
-    width: 100%
 }
 
 #answers-table {

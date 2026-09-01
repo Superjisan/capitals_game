@@ -1,10 +1,33 @@
-import capitals from './capitals.json' with { type: 'json' };
-import africaCapitals from './africa_capitals.json' with { type: 'json' };
-import asiaCapitals from './asia_capitals.json' with { type: 'json' };
-import europeCapitals from './europe_capitals.json' with { type: 'json' };
-import northAmericaCapitals from './north_america_capitals.json' with { type: 'json' };
-import southAmericaCapitals from './south_america_capitals.json' with { type: 'json' };
-import oceaniaCapitals from './oceania_capitals.json' with { type: 'json' };
+import capitals from './data/capitals.json' with { type: 'json' };
+import africaCapitals from './data/africa_capitals.json' with { type: 'json' };
+import asiaCapitals from './data/asia_capitals.json' with { type: 'json' };
+import europeCapitals from './data/europe_capitals.json' with { type: 'json' };
+import northAmericaCapitals from './data/north_america_capitals.json' with { type: 'json' };
+import southAmericaCapitals from './data/south_america_capitals.json' with { type: 'json' };
+import oceaniaCapitals from './data/oceania_capitals.json' with { type: 'json' };
+import { COUNTRY_ISO_CODES } from './country_iso_codes.js';
+
+export function updateCountryMap(country) {
+  const mapElem = document.getElementById('country-map');
+  const isoCode = COUNTRY_ISO_CODES[country];
+  if (!isoCode) {
+    mapElem.hidden = true;
+    return;
+  }
+  mapElem.src = `https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${isoCode}/vector.svg`;
+  mapElem.hidden = false;
+}
+
+export function updateCountryFlag(country) {
+  const flagElem = document.getElementById('country-flag');
+  const isoCode = COUNTRY_ISO_CODES[country];
+  if (!isoCode) {
+    flagElem.hidden = true;
+    return;
+  }
+  flagElem.src = `https://flagcdn.com/${isoCode}.svg`;
+  flagElem.hidden = false;
+}
 
 let score = 0;
 let countriesPlayed = [];
@@ -115,6 +138,8 @@ export function playGame() {
   }
   // add the country to html
   document.getElementById('country').innerText = country;
+  updateCountryMap(country);
+  updateCountryFlag(country);
   return country;
 }
 
@@ -152,6 +177,13 @@ export function removeActiveClassFromContinentButtons() {
     button.classList.remove('active');
   }
 }
+
+document.getElementById('country-map').addEventListener('error', function () {
+  this.hidden = true;
+});
+document.getElementById('country-flag').addEventListener('error', function () {
+  this.hidden = true;
+});
 
 resetGame();
 playGame();
