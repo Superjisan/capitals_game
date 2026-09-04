@@ -24,11 +24,13 @@ export function setupDom({ resetStorage = true } = {}) {
 
 let importCount = 0;
 
-// Dynamically (re)imports the game module with a cache-busting query string so
-// each call re-runs its top-level setup (including initGame()) against
-// whatever DOM/localStorage globals are currently installed -- the module
-// cache would otherwise return the same already-initialized instance.
+// Dynamically (re)imports the app's entry point (main.js -- it wires the DOM
+// event listeners and calls initGame(), then re-exports everything from
+// capitals_game.js) with a cache-busting query string so each call re-runs
+// that top-level setup against whatever DOM/localStorage globals are
+// currently installed -- the module cache would otherwise return the same
+// already-initialized instance.
 export function importGame() {
   importCount += 1;
-  return import(`../../capitals_game.js?t=${importCount}`);
+  return import(`../../js/main.js?t=${importCount}`);
 }
