@@ -3,7 +3,11 @@ import { saveGameState, loadGameState } from './persistence.js';
 
 const CONTINENTS = ['africa', 'asia', 'europe', 'north-america', 'south-america', 'oceania'];
 
-// Plain { country: capital } map, e.g. { Afghanistan: "Kabul", Albania: ["Tirana", "Tirane"] }.
+// Plain { country: capital } map, e.g. { Afghanistan: "Kabul", Bolivia: ["La Paz", "Sucre"] }.
+// A capital is an array only when a country genuinely has more than one (Bolivia,
+// South Africa); alternate spellings of a single capital live in each country's
+// own "aliases" list instead (see getCorrectAnswer) and never appear here, so this
+// map always reflects the one canonical name to display.
 // Countries can belong to zero continents (e.g. England, only playable in World mode)
 // or more than one (e.g. Russia, playable in both Asia and Europe).
 const capitals = Object.fromEntries(
@@ -40,10 +44,15 @@ export function isValidMode(mode) {
 
 export function getCorrectAnswer(country, answer) {
   const correctCapital = capitals[country];
+  const lowerAnswer = answer.toLowerCase();
   if (Array.isArray(correctCapital)) {
-    return correctCapital.map((v) => v.toLowerCase()).includes(answer.toLowerCase());
+    return correctCapital.some((v) => v.toLowerCase() === lowerAnswer);
   }
-  return correctCapital.toLowerCase() === answer.toLowerCase();
+  if (correctCapital.toLowerCase() === lowerAnswer) {
+    return true;
+  }
+  const aliases = countries[country].aliases;
+  return Boolean(aliases && aliases.some((v) => v.toLowerCase() === lowerAnswer));
 }
 
 export function getCapital(country) {
