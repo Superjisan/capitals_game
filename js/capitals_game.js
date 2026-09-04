@@ -1,13 +1,13 @@
 import {
-  MODE_DATASETS, isValidMode, getCorrectAnswer, getCapital, getRandomCountry, setCurrentCountry,
-  hasPlayed, isGameOver, recordAnswer, resetState, applySavedState, serializeState, getState,
+  MODE_DATASETS, getCorrectAnswer, getCapital, getRandomCountry, setCurrentCountry, setFeedback,
+  hasPlayed, isGameOver, recordAnswer, resetState, applySavedState, getState, saveState, loadState,
 } from './game_state.js';
 import { updateCountryMap, updateCountryFlag } from './country_images.js';
 import { buildAnswerRow, clearAnswersTable } from './answers_table.js';
-import { saveGameState, loadGameState } from './persistence.js';
 import { populateCapitalsDatalist } from './datalist.js';
 
 export { getCorrectAnswer, getCapital, getRandomCountry, getState, updateCountryMap, updateCountryFlag };
+export { buildResultsEmojiGrid, buildShareText, shareScore } from './share.js';
 
 populateCapitalsDatalist(MODE_DATASETS.world);
 
@@ -33,7 +33,9 @@ export function checkAnswer(skipped = false) {
   const correctCapitalText = Array.isArray(correctCapital) ? `one of these: ${correctCapital.join(', ')}` : `${correctCapital}`;
   const correctAnswerText = `The capital of ${country} is ${correctCapitalText}`;
   const yourAnswerText = `Your answer: ${answer}`;
-  document.getElementById('feedback').innerText = correctAnswer ? `Correct! ${correctAnswerText}.` : `Wrong! ${correctAnswerText}. ${yourAnswerText}`;
+  const feedbackText = correctAnswer ? `Correct! ${correctAnswerText}.` : `Wrong! ${correctAnswerText}. ${yourAnswerText}`;
+  setFeedback(feedbackText);
+  document.getElementById('feedback').innerText = feedbackText;
   document.getElementById('score').innerText = `Score: ${getState().score}`;
 
   addCountryAnswerToHTML(country, answer);
@@ -47,48 +49,11 @@ export function checkAnswer(skipped = false) {
 
 export function gameOverFeedback() {
   const { score, numCountries } = getState();
-  document.getElementById('feedback').innerText = `Game over! You have played all countries for this setting. Your final score is ${score} out of ${numCountries}.`;
+  const feedbackText = `Game over! You have played all countries for this setting. Your final score is ${score} out of ${numCountries}.`;
+  setFeedback(feedbackText);
+  document.getElementById('feedback').innerText = feedbackText;
   document.getElementById('share').hidden = false;
   saveState();
-}
-
-export function buildResultsEmojiGrid(rowSize = 10) {
-  const squares = getState().resultsGrid.map((correct) => correct ? '🟩' : '🟥');
-  const rows = [];
-  for (let i = 0; i < squares.length; i += rowSize) {
-    rows.push(squares.slice(i, i + rowSize).join(''));
-  }
-  return rows.join('\n');
-}
-
-export function buildShareText() {
-  const activeContinentButton = document.querySelector('.continent-btn.active');
-  const modeName = activeContinentButton ? activeContinentButton.textContent.trim() : 'World';
-  const { score, numCountries } = getState();
-  return `Capitals Game - ${modeName}\nScore: ${score}/${numCountries}\n${buildResultsEmojiGrid()}`;
-}
-
-export async function shareScore() {
-  const shareData = { text: buildShareText(), url: window.location.href };
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      console.error(err);
-    }
-    return;
-  }
-  const shareButton = document.getElementById('share');
-  const originalLabel = shareButton.innerText;
-  try {
-    await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
-    shareButton.innerText = 'Copied to clipboard!';
-  } catch (err) {
-    shareButton.innerText = 'Could not copy score';
-  }
-  setTimeout(() => {
-    shareButton.innerText = originalLabel;
-  }, 2000);
 }
 
 export function playGame() {
@@ -126,24 +91,16 @@ export function removeActiveClassFromContinentButtons() {
   }
 }
 
-export function saveState() {
-  saveGameState(serializeState(document.getElementById('feedback').innerText));
-}
-
-export function loadState() {
-  return loadGameState(isValidMode);
-}
-
 export function restoreState(state) {
   applySavedState(state);
-  const { score, countriesPlayed, numCountries, currentMode, currentCountry, answersGiven } = getState();
+  const { score, countriesPlayed, numCountries, currentMode, currentCountry, answersGiven, feedback } = getState();
 
   removeActiveClassFromContinentButtons();
   document.getElementById(currentMode).classList.add('active');
   document.getElementById('score').innerText = `Score: ${score}`;
   document.getElementById('progress-value').innerText = countriesPlayed.length;
   document.getElementById('total-countries').innerText = numCountries;
-  document.getElementById('feedback').innerText = state.feedback || '';
+  document.getElementById('feedback').innerText = feedback;
 
   clearAnswersTable();
   countriesPlayed.forEach((country, i) => addCountryAnswerToHTML(country, answersGiven[i]));

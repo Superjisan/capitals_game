@@ -1,7 +1,8 @@
-import { checkAnswer, shareScore, switchMode, initGame } from './capitals_game.js';
+import { checkAnswer, switchMode, initGame } from './capitals_game.js';
 import { MODE_DATASETS } from './game_state.js';
 import { registerCountryImageErrorHandlers } from './country_images.js';
 import { registerServiceWorker } from './pwa.js';
+import { shareScore } from './share.js';
 
 export * from './capitals_game.js';
 
