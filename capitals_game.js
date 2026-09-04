@@ -35,11 +35,25 @@ export function updateCountryFlag(country) {
   flagElem.hidden = false;
 }
 
+const STORAGE_KEY = 'capitalsGameState';
+const MODE_DATASETS = {
+  world: capitals,
+  africa: africaCapitals,
+  asia: asiaCapitals,
+  europe: europeCapitals,
+  'north-america': northAmericaCapitals,
+  'south-america': southAmericaCapitals,
+  oceania: oceaniaCapitals,
+};
+
 let score = 0;
 let countriesPlayed = [];
 let countriesLeft = structuredClone(capitals);
 let numCountries = Object.keys(capitals).length;
 let resultsGrid = [];
+let answersGiven = [];
+let currentMode = 'world';
+let currentCountry = null;
 
 const capitalsDataList = Object.values(capitals).flat();
 const datalistElem = document.getElementById('capitals-list');
@@ -76,6 +90,7 @@ export function checkAnswer(skipped = false) {
     incrementScore();
   }
   resultsGrid.push(correctAnswer);
+  answersGiven.push(answer);
   countriesPlayed.push(country);
   // update countriesLeft
   delete countriesLeft[country];
@@ -109,7 +124,6 @@ export function addCountryAnswerToHTML(country, answer) {
   trElem.appendChild(capitalTd);
   tbodyElem.appendChild(trElem);
 
-  console.log(`Country: ${country}, User answer: ${answer}, Correct capital(s): ${capitals[country]}`);
   const correctAnswer = getCorrectAnswer(country, answer);
   trElem.style.backgroundColor = correctAnswer ? 'lightgreen' : 'lightcoral';
   const resultTd = document.createElement('td');
@@ -135,6 +149,7 @@ export function gameOverFeedback() {
   const yourScoreText = `Your final score is ${getScore()} out of ${numCountries}.`;
   document.getElementById('feedback').innerText = `Game over! You have played all countries for this setting. ${yourScoreText}`;
   document.getElementById('share').hidden = false;
+  saveState();
 }
 
 export function buildResultsEmojiGrid(rowSize = 10) {
@@ -148,7 +163,7 @@ export function buildResultsEmojiGrid(rowSize = 10) {
 
 export function buildShareText() {
   const activeContinentButton = document.querySelector('.continent-btn.active');
-  const modeName = activeContinentButton ? activeContinentButton.innerText : 'World';
+  const modeName = activeContinentButton ? activeContinentButton.textContent.trim() : 'World';
   return `Capitals Game - ${modeName}\nScore: ${getScore()}/${numCountries}\n${buildResultsEmojiGrid()}`;
 }
 
@@ -184,25 +199,29 @@ export function playGame() {
     return;
   }
   // add the country to html
+  currentCountry = country;
   document.getElementById('country').innerText = country;
   updateCountryMap(country);
   updateCountryFlag(country);
+  saveState();
   return country;
 }
 
-export function resetGame(capitalsToUse = capitals) {
+export function resetGame(capitalsToUse = capitals, mode = 'world') {
   score = 0;
   countriesPlayed = [];
   countriesLeft = structuredClone(capitalsToUse);
   numCountries = Object.keys(capitalsToUse).length;
   resultsGrid = [];
+  answersGiven = [];
+  currentMode = mode;
+  currentCountry = null;
 
-  score = 0;
-  countriesPlayed = [];
   document.getElementById('score').innerText = `Score: ${getScore()}`;
   document.getElementById('progress-value').innerText = countriesPlayed.length;
   document.getElementById('total-countries').innerText = numCountries;
   document.getElementById('share').hidden = true;
+  document.getElementById('feedback').innerText = '';
 
   // clear the table of previous answers
   const tbodyElem = document.getElementById('answers-body');
@@ -210,6 +229,7 @@ export function resetGame(capitalsToUse = capitals) {
     tbodyElem.removeChild(tbodyElem.firstChild);
   }
 
+  saveState();
 }
 
 export function incrementScore() {
@@ -227,6 +247,88 @@ export function removeActiveClassFromContinentButtons() {
   }
 }
 
+export function saveState() {
+  const state = {
+    mode: currentMode,
+    currentCountry,
+    feedback: document.getElementById('feedback').innerText,
+    countriesPlayed,
+    resultsGrid,
+    answersGiven,
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+export function loadState() {
+  let state;
+  try {
+    state = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  } catch (err) {
+    return null;
+  }
+  if (!state || !MODE_DATASETS[state.mode] || !Array.isArray(state.countriesPlayed)) {
+    return null;
+  }
+  return state;
+}
+
+export function restoreState(state) {
+  const capitalsToUse = MODE_DATASETS[state.mode];
+  currentMode = state.mode;
+  countriesPlayed = state.countriesPlayed;
+  resultsGrid = state.resultsGrid;
+  answersGiven = state.answersGiven;
+  currentCountry = state.currentCountry;
+  score = resultsGrid.filter(Boolean).length;
+  numCountries = Object.keys(capitalsToUse).length;
+  countriesLeft = structuredClone(capitalsToUse);
+  countriesPlayed.forEach((country) => delete countriesLeft[country]);
+
+  removeActiveClassFromContinentButtons();
+  document.getElementById(currentMode).classList.add('active');
+  document.getElementById('score').innerText = `Score: ${getScore()}`;
+  document.getElementById('progress-value').innerText = countriesPlayed.length;
+  document.getElementById('total-countries').innerText = numCountries;
+  document.getElementById('feedback').innerText = state.feedback || '';
+
+  const tbodyElem = document.getElementById('answers-body');
+  while (tbodyElem.firstChild) {
+    tbodyElem.removeChild(tbodyElem.firstChild);
+  }
+  countriesPlayed.forEach((country, i) => addCountryAnswerToHTML(country, answersGiven[i]));
+
+  if (countriesPlayed.length >= numCountries) {
+    if (currentCountry) {
+      document.getElementById('country').innerText = currentCountry;
+      updateCountryMap(currentCountry);
+      updateCountryFlag(currentCountry);
+    }
+    gameOverFeedback();
+  } else if (currentCountry) {
+    document.getElementById('country').innerText = currentCountry;
+    updateCountryMap(currentCountry);
+    updateCountryFlag(currentCountry);
+  } else {
+    playGame();
+  }
+}
+
+export function switchMode(mode) {
+  resetGame(MODE_DATASETS[mode], mode);
+  removeActiveClassFromContinentButtons();
+  document.getElementById(mode).classList.add('active');
+  playGame();
+}
+
+export function initGame() {
+  const savedState = loadState();
+  if (savedState) {
+    restoreState(savedState);
+  } else {
+    switchMode('world');
+  }
+}
+
 document.getElementById('country-map').addEventListener('error', function () {
   this.hidden = true;
 });
@@ -234,8 +336,7 @@ document.getElementById('country-flag').addEventListener('error', function () {
   this.hidden = true;
 });
 
-resetGame();
-playGame();
+initGame();
 document.getElementById('answer').addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     // Your code to run when Enter is pressed
@@ -249,47 +350,8 @@ document.getElementById('skip').addEventListener('click', () => {
 document.getElementById('share').addEventListener('click', shareScore);
 
 // button listeners for continents
-document.getElementById('africa').addEventListener('click', () => {
-  resetGame(africaCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('africa').classList.add('active');
-  playGame();
-});
-document.getElementById('asia').addEventListener('click', () => {
-  resetGame(asiaCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('asia').classList.add('active');
-  playGame();
-});
-document.getElementById('europe').addEventListener('click', () => {
-  resetGame(europeCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('europe').classList.add('active');
-  playGame();
-});
-document.getElementById('north-america').addEventListener('click', () => {
-  resetGame(northAmericaCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('north-america').classList.add('active');
-  playGame();
-});
-document.getElementById('south-america').addEventListener('click', () => {
-  resetGame(southAmericaCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('south-america').classList.add('active');
-  playGame();
-});
-document.getElementById('world').addEventListener('click', () => {
-  resetGame(capitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('world').classList.add('active');
-  playGame();
-});
-document.getElementById('oceania').addEventListener('click', () => {
-  resetGame(oceaniaCapitals);
-  removeActiveClassFromContinentButtons();
-  document.getElementById('oceania').classList.add('active');
-  playGame();
+Object.keys(MODE_DATASETS).forEach((mode) => {
+  document.getElementById(mode).addEventListener('click', () => switchMode(mode));
 });
 
 // TO be able to install it as a PWA, we need to register a service worker
