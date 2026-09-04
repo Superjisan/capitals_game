@@ -103,3 +103,24 @@
     font-size: 1.2rem;
     font-weight: bold;
 }
+
+#score, #progress {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0.5rem 0;
+}
+
+#share {
+    display: block;
+    height: 2rem;
+    margin: 1rem auto;
+    padding: 0 1.5rem;
+    color: white;
+    background-color: green;
+    cursor: pointer;
+}
+
+#share[hidden] {
+    display: none;
+}

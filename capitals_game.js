@@ -39,6 +39,7 @@ let score = 0;
 let countriesPlayed = [];
 let countriesLeft = structuredClone(capitals);
 let numCountries = Object.keys(capitals).length;
+let resultsGrid = [];
 
 const capitalsDataList = Object.values(capitals).flat();
 const datalistElem = document.getElementById('capitals-list');
@@ -74,6 +75,7 @@ export function checkAnswer(skipped = false) {
   if (correctAnswer) {
     incrementScore();
   }
+  resultsGrid.push(correctAnswer);
   countriesPlayed.push(country);
   // update countriesLeft
   delete countriesLeft[country];
@@ -132,6 +134,45 @@ export function getRandomCountry() {
 export function gameOverFeedback() {
   const yourScoreText = `Your final score is ${getScore()} out of ${numCountries}.`;
   document.getElementById('feedback').innerText = `Game over! You have played all countries for this setting. ${yourScoreText}`;
+  document.getElementById('share').hidden = false;
+}
+
+export function buildResultsEmojiGrid(rowSize = 10) {
+  const squares = resultsGrid.map((correct) => correct ? '🟩' : '🟥');
+  const rows = [];
+  for (let i = 0; i < squares.length; i += rowSize) {
+    rows.push(squares.slice(i, i + rowSize).join(''));
+  }
+  return rows.join('\n');
+}
+
+export function buildShareText() {
+  const activeContinentButton = document.querySelector('.continent-btn.active');
+  const modeName = activeContinentButton ? activeContinentButton.innerText : 'World';
+  return `Capitals Game - ${modeName}\nScore: ${getScore()}/${numCountries}\n${buildResultsEmojiGrid()}`;
+}
+
+export async function shareScore() {
+  const shareData = { text: buildShareText(), url: window.location.href };
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.error(err);
+    }
+    return;
+  }
+  const shareButton = document.getElementById('share');
+  const originalLabel = shareButton.innerText;
+  try {
+    await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+    shareButton.innerText = 'Copied to clipboard!';
+  } catch (err) {
+    shareButton.innerText = 'Could not copy score';
+  }
+  setTimeout(() => {
+    shareButton.innerText = originalLabel;
+  }, 2000);
 }
 
 export function playGame() {
@@ -154,12 +195,14 @@ export function resetGame(capitalsToUse = capitals) {
   countriesPlayed = [];
   countriesLeft = structuredClone(capitalsToUse);
   numCountries = Object.keys(capitalsToUse).length;
+  resultsGrid = [];
 
   score = 0;
   countriesPlayed = [];
   document.getElementById('score').innerText = `Score: ${getScore()}`;
   document.getElementById('progress-value').innerText = countriesPlayed.length;
   document.getElementById('total-countries').innerText = numCountries;
+  document.getElementById('share').hidden = true;
 
   // clear the table of previous answers
   const tbodyElem = document.getElementById('answers-body');
@@ -203,6 +246,7 @@ document.getElementById('submit').addEventListener('click', checkAnswer);
 document.getElementById('skip').addEventListener('click', () => {
   checkAnswer(true); // Pass true to indicate the question was skipped
 });
+document.getElementById('share').addEventListener('click', shareScore);
 
 // button listeners for continents
 document.getElementById('africa').addEventListener('click', () => {
@@ -257,5 +301,3 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-
-// Share score functionality
