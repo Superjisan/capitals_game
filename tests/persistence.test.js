@@ -1,7 +1,9 @@
 import { assertEquals, assertNotEquals } from 'jsr:@std/assert@1';
-import oceaniaCapitals from '../data/oceania_capitals.json' with { type: 'json' };
+import { MODE_DATASETS } from '../js/game_state.js';
 import { setupDom, importGame } from './support/env.js';
 import { answerCurrentCountry } from './support/play.js';
+
+const oceaniaCapitals = MODE_DATASETS.oceania;
 
 Deno.test('a fresh visit with no saved state starts a new World game', async () => {
   setupDom();

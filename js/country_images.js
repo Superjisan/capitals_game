@@ -1,8 +1,8 @@
-import { COUNTRY_ISO_CODES, FALLBACK_FLAG_SLUGS } from './country_iso_codes.js';
+import { getCountryIso, getFallbackFlagSlug } from './game_state.js';
 
 export function updateCountryMap(country) {
   const mapElem = document.getElementById('country-map');
-  const isoCode = COUNTRY_ISO_CODES[country];
+  const isoCode = getCountryIso(country);
   if (!isoCode) {
     mapElem.hidden = true;
     return;
@@ -13,13 +13,13 @@ export function updateCountryMap(country) {
 
 export function updateCountryFlag(country) {
   const flagElem = document.getElementById('country-flag');
-  const isoCode = COUNTRY_ISO_CODES[country];
+  const isoCode = getCountryIso(country);
   if (isoCode) {
     flagElem.src = `https://flagcdn.com/${isoCode}.svg`;
     flagElem.hidden = false;
     return;
   }
-  const fallbackSlug = FALLBACK_FLAG_SLUGS[country];
+  const fallbackSlug = getFallbackFlagSlug(country);
   if (!fallbackSlug) {
     flagElem.hidden = true;
     return;

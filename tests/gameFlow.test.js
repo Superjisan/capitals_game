@@ -1,8 +1,9 @@
 import { assertEquals, assertMatch } from 'jsr:@std/assert@1';
-import oceaniaCapitals from '../data/oceania_capitals.json' with { type: 'json' };
+import { MODE_DATASETS } from '../js/game_state.js';
 import { setupDom, importGame } from './support/env.js';
 import { answerCurrentCountry } from './support/play.js';
 
+const oceaniaCapitals = MODE_DATASETS.oceania;
 const OCEANIA_COUNT = Object.keys(oceaniaCapitals).length;
 
 Deno.test('switching to a continent resets progress and scopes the country pool', async () => {

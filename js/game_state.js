@@ -1,20 +1,27 @@
-import capitals from '../data/capitals.json' with { type: 'json' };
-import africaCapitals from '../data/africa_capitals.json' with { type: 'json' };
-import asiaCapitals from '../data/asia_capitals.json' with { type: 'json' };
-import europeCapitals from '../data/europe_capitals.json' with { type: 'json' };
-import northAmericaCapitals from '../data/north_america_capitals.json' with { type: 'json' };
-import southAmericaCapitals from '../data/south_america_capitals.json' with { type: 'json' };
-import oceaniaCapitals from '../data/oceania_capitals.json' with { type: 'json' };
+import countries from '../data/capitals.json' with { type: 'json' };
 import { saveGameState, loadGameState } from './persistence.js';
+
+const CONTINENTS = ['africa', 'asia', 'europe', 'north-america', 'south-america', 'oceania'];
+
+// Plain { country: capital } map, e.g. { Afghanistan: "Kabul", Albania: ["Tirana", "Tirane"] }.
+// Countries can belong to zero continents (e.g. England, only playable in World mode)
+// or more than one (e.g. Russia, playable in both Asia and Europe).
+const capitals = Object.fromEntries(
+  Object.entries(countries).map(([country, data]) => [country, data.capital])
+);
 
 export const MODE_DATASETS = {
   world: capitals,
-  africa: africaCapitals,
-  asia: asiaCapitals,
-  europe: europeCapitals,
-  'north-america': northAmericaCapitals,
-  'south-america': southAmericaCapitals,
-  oceania: oceaniaCapitals,
+  ...Object.fromEntries(
+    CONTINENTS.map((continent) => [
+      continent,
+      Object.fromEntries(
+        Object.entries(countries)
+          .filter(([, data]) => data.continents.includes(continent))
+          .map(([country, data]) => [country, data.capital])
+      ),
+    ])
+  ),
 };
 
 let score = 0;
@@ -41,6 +48,14 @@ export function getCorrectAnswer(country, answer) {
 
 export function getCapital(country) {
   return capitals[country];
+}
+
+export function getCountryIso(country) {
+  return countries[country]?.iso ?? null;
+}
+
+export function getFallbackFlagSlug(country) {
+  return countries[country]?.flagSlug ?? null;
 }
 
 export function getRandomCountry() {
