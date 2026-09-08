@@ -1,5 +1,5 @@
 import { checkAnswer, switchMode, initGame } from './capitals_game.js';
-import { MODE_DATASETS } from './game_state.js';
+import { MODE_DATASETS, getCorrectAnswer } from './game_state.js';
 import { registerCountryImageErrorHandlers } from './country_images.js';
 import { registerServiceWorker } from './pwa.js';
 import { shareScore } from './share.js';
@@ -12,6 +12,19 @@ initGame();
 bindCapitalSuggestions();
 
 const answerInput = document.getElementById('answer');
+
+answerInput.addEventListener('input', () => {
+  const country = document.getElementById('country').innerText;
+  const value = answerInput.value.trim();
+
+  if (!country || !value) {
+    return;
+  }
+
+  if (getCorrectAnswer(country, value)) {
+    checkAnswer();
+  }
+});
 
 answerInput.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter') {
