@@ -45,7 +45,10 @@
             <img id="country-flag" alt="" hidden>
         </div>
         <div id="input-div">
-            <input list="capitals-list" type="text" id="answer" placeholder="Enter the capital" autocomplete="off">
+            <div id="answer-wrapper">
+                <input type="text" id="answer" placeholder="Enter the capital" autocomplete="off">
+                <div id="answer-suggestions" class="answer-suggestions" hidden></div>
+            </div>
             <datalist id="capitals-list">
                 <!-- Options will be populated dynamically -->
             </datalist>

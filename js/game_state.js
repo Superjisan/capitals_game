@@ -51,8 +51,11 @@ export function getCorrectAnswer(country, answer) {
   if (correctCapital.toLowerCase() === lowerAnswer) {
     return true;
   }
-  const aliases = countries[country].aliases;
-  return Boolean(aliases && aliases.some((v) => v.toLowerCase() === lowerAnswer));
+  return getAliases(country).some((v) => v.toLowerCase() === lowerAnswer);
+}
+
+export function getAliases(country) {
+  return countries[country]?.aliases ?? [];
 }
 
 export function getCapital(country) {
