@@ -76,14 +76,41 @@ Deno.test('Serbia uses the override rather than the mapsicon map that swallows K
   assertEquals(mapElem.src.includes('djaiss/mapsicon/master'), false);
 });
 
-Deno.test('every map override is pinned to a commit rather than a moving branch', () => {
-  const overrides = Object.entries(countries)
-    .filter(([, data]) => data.mapUrl)
-    .map(([country, data]) => [country, data.mapUrl]);
+const mapOverrides = Object.entries(countries)
+  .filter(([, data]) => data.mapUrl)
+  .map(([country, data]) => [country, data.mapUrl]);
 
-  assert(overrides.length > 0, 'the Kosovo and Serbia overrides should still be here');
-  for (const [country, url] of overrides) {
+Deno.test('every remote map override is pinned to a commit rather than a moving branch', () => {
+  const remote = mapOverrides.filter(([, url]) => url.startsWith('http'));
+
+  assert(remote.length > 0, 'the Kosovo and Serbia overrides should still be here');
+  for (const [country, url] of remote) {
     assertMatch(url, /^https:\/\/raw\.githubusercontent\.com\//, `${country} should load over https from raw.githubusercontent`);
     assertMatch(url, /\/[0-9a-f]{40}\//, `${country} should pin a 40-character commit sha, not a branch name`);
   }
+});
+
+Deno.test('every map drawn in this repo is on disk and is a single-path svg', async () => {
+  const local = mapOverrides.filter(([, url]) => !url.startsWith('http'));
+
+  assert(local.length > 0, 'the Palestine and Micronesia icons should still be here');
+  for (const [country, path] of local) {
+    const svg = await Deno.readTextFile(new URL(`../${path}`, import.meta.url));
+    assertMatch(svg, /<svg[^>]*viewBox="0 0 1024 1024"/, `${country} should use the 1024 square mapsicon uses`);
+    assertEquals(svg.match(/<path/g)?.length, 1, `${country} should be one filled silhouette, like every other map`);
+    assertEquals(/fill=/.test(svg), false, `${country} should inherit the default black fill rather than set its own`);
+  }
+});
+
+Deno.test('Palestine and Micronesia draw the maps this repo ships', async () => {
+  setupDom();
+  const game = await importGame();
+
+  game.updateCountryMap('Palestine');
+  assertEquals(document.getElementById('country-map').hidden, false);
+  assertMatch(document.getElementById('country-map').src, /maps\/ps\.svg$/);
+
+  game.updateCountryMap('Federated States of Micronesia');
+  assertEquals(document.getElementById('country-map').hidden, false);
+  assertMatch(document.getElementById('country-map').src, /maps\/fm\.svg$/);
 });

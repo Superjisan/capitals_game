@@ -25,6 +25,10 @@ Tests use [Deno](https://deno.com)'s built-in test runner with `jsdom` for DOM e
 
 This runs every file under [tests/](tests/) once, headless, with no browser required.
 
+## Country maps
+
+Outlines come from [mapsicon](https://github.com/djaiss/mapsicon), keyed off each country's ISO code.  Where mapsicon has no map or the wrong borders, [data/capitals.json](data/capitals.json) carries a `mapUrl` override -- see [docs/FLAG_CREATION.md](docs/FLAG_CREATION.md) for how the maps in [maps/](maps/) are generated and how to add another.
+
 ## Deployment
 
 The site deploys to GitHub Pages straight from the `main` branch root -- any push to `main` triggers a "pages build and deployment" run under the repo's **Actions** tab, and the live site updates automatically once it completes.  There's no separate workflow file to maintain.
