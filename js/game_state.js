@@ -66,6 +66,10 @@ export function getCountryIso(country) {
   return countries[country]?.iso ?? null;
 }
 
+export function getMapOverride(country) {
+  return countries[country]?.mapUrl ?? null;
+}
+
 export function getFallbackFlagSlug(country) {
   return countries[country]?.flagSlug ?? null;
 }

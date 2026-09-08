@@ -2,12 +2,12 @@ import {
   MODE_DATASETS, getCorrectAnswer, getCapital, getRandomCountry, setCurrentCountry, setFeedback,
   hasPlayed, isGameOver, recordAnswer, resetState, applySavedState, getState, saveState, loadState,
 } from './game_state.js';
-import { updateCountryMap, updateCountryFlag, setVisibleImages, getVisibleImages } from './country_images.js';
+import { updateCountryMap, updateCountryFlag, mapUrl, setVisibleImages, getVisibleImages } from './country_images.js';
 import { buildAnswerRow, clearAnswersTable } from './answers_table.js';
 import { populateCapitalsDatalist } from './datalist.js';
 import { saveGameMode, loadGameMode, saveStudyImages, loadStudyImages, STUDY_IMAGE_CHOICES } from './persistence.js';
 
-export { getCorrectAnswer, getCapital, getRandomCountry, getState, updateCountryMap, updateCountryFlag, getVisibleImages };
+export { getCorrectAnswer, getCapital, getRandomCountry, getState, updateCountryMap, updateCountryFlag, mapUrl, getVisibleImages };
 export { buildResultsEmojiGrid, buildShareText, shareScore } from './share.js';
 
 let isStudyMode = false;

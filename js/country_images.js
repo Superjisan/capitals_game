@@ -1,4 +1,4 @@
-import { getCountryIso, getFallbackFlagSlug } from './game_state.js';
+import { getCountryIso, getMapOverride, getFallbackFlagSlug } from './game_state.js';
 
 let visibleImages = 'both';
 
@@ -18,14 +18,25 @@ function isVisible(kind) {
   return visibleImages === 'both' || visibleImages === kind;
 }
 
+// mapsicon's own map for a country is used unless capitals.json overrides it,
+// which it does where mapsicon master has no map or draws the wrong borders.
+export function mapUrl(country) {
+  const override = getMapOverride(country);
+  if (override) {
+    return override;
+  }
+  const isoCode = getCountryIso(country);
+  return isoCode ? `https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${isoCode}/vector.svg` : null;
+}
+
 export function updateCountryMap(country) {
   const mapElem = document.getElementById('country-map');
-  const isoCode = getCountryIso(country);
-  if (!isoCode || !isVisible('map')) {
+  const source = mapUrl(country);
+  if (!source || !isVisible('map')) {
     mapElem.hidden = true;
     return;
   }
-  mapElem.src = `https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${isoCode}/vector.svg`;
+  mapElem.src = source;
   mapElem.hidden = false;
 }
 
