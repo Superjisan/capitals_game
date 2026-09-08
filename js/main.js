@@ -1,4 +1,6 @@
-import { checkAnswer, switchMode, initGame } from './capitals_game.js';
+import {
+  checkAnswer, switchMode, initGame, setStudyMode, setStudyImages, revealStudyCapital, moveStudyIndex,
+} from './capitals_game.js';
 import { MODE_DATASETS, getCorrectAnswer } from './game_state.js';
 import { registerCountryImageErrorHandlers } from './country_images.js';
 import { registerServiceWorker } from './pwa.js';
@@ -48,6 +50,14 @@ answerInput.addEventListener('keydown', (event) => {
 document.getElementById('submit').addEventListener('click', checkAnswer);
 document.getElementById('skip').addEventListener('click', () => checkAnswer(true));
 document.getElementById('share').addEventListener('click', shareScore);
+document.getElementById('play-mode').addEventListener('click', () => setStudyMode(false));
+document.getElementById('study-mode').addEventListener('click', () => setStudyMode(true));
+document.getElementById('study-prev').addEventListener('click', () => moveStudyIndex(-1));
+document.getElementById('study-next').addEventListener('click', () => moveStudyIndex(1));
+document.getElementById('reveal-answer').addEventListener('click', () => revealStudyCapital());
+document.querySelectorAll('.image-toggle-btn').forEach((button) => {
+  button.addEventListener('click', () => setStudyImages(button.dataset.images));
+});
 
 // button listeners for continents
 Object.keys(MODE_DATASETS).forEach((mode) => {

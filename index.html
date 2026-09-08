@@ -40,6 +40,11 @@
     </div>
     <div id="game-container">
         <p id="country"></p>
+        <div id="image-toggle" class="image-toggle" hidden>
+            <button id="map-only" class="image-toggle-btn" type="button" data-images="map">🗺️ Map</button>
+            <button id="flag-only" class="image-toggle-btn" type="button" data-images="flag">🏴 Flag</button>
+            <button id="both-images" class="image-toggle-btn active" type="button" data-images="both">🖼️ Both</button>
+        </div>
         <div id="country-images">
             <img id="country-map" alt="" hidden>
             <img id="country-flag" alt="" hidden>
@@ -49,6 +54,8 @@
                 <input type="text" id="answer" placeholder="Enter the capital" autocomplete="off">
                 <div id="answer-suggestions" class="answer-suggestions" hidden></div>
             </div>
+            <p id="capital" hidden></p>
+            <button id="reveal-answer" type="button" aria-label="Reveal capital" title="Reveal capital">👁️ Reveal</button>
             <datalist id="capitals-list">
                 <!-- Options will be populated dynamically -->
             </datalist>
@@ -56,6 +63,10 @@
         <div id="buttons-div">
             <button id="submit">Submit</button>
             <button id="skip">Skip</button>
+        </div>
+        <div id="study-controls" hidden>
+            <button id="study-prev" type="button">←</button>
+            <button id="study-next" type="button">→</button>
         </div>
         <p id="feedback">
 
@@ -67,6 +78,10 @@
             Progress: <span id="progress-value">0</span> / <span id="total-countries">0</span>
         </p>
         <button id="share" hidden>📤 Share Score</button>
+        <div id="mode-toggle" class="mode-toggle">
+            <button id="play-mode" class="mode-toggle-btn active" type="button">🎮 Play</button>
+            <button id="study-mode" class="mode-toggle-btn" type="button">📚 Study</button>
+        </div>
 
         <!-- Table containing all answers -->
         <table id="answers-table">
