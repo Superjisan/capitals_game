@@ -1,30 +1,28 @@
-#answer {
-    width: 20rem;
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+h1 {
+    margin: 1.25rem 0 0.75rem;
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: #172554;
+}
+
+p {
+    margin: 0.5rem auto;
+    text-align: center;
+    max-width: 42rem;
+    color: #334155;
     font-size: 1rem;
-    height: 2rem;
-}
-
-#submit {
-    height: 2rem;
-    color: white;
-    background-color: blue;
-    flex: 1 1 8rem;
-    max-width: 10rem;
-}
-
-#skip {
-    height: 2rem;
-    color: white;
-    background-color: gray;
-    flex: 1 1 8rem;
-    max-width: 10rem;
-}
-
-#buttons-div {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem 0;
 }
 
 #continent-buttons {
@@ -32,48 +30,218 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 1rem 0;
+    gap: 0.5rem;
+    margin: 1rem 0 1.25rem;
+}
+
+.continent-btn {
+    margin: 0;
+    padding: 0.6rem 1rem;
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: #1f2937;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 0.85rem;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.continent-btn:hover,
+.continent-btn:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+}
+
+.continent-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+}
+
+.continent-btn:disabled {
+    opacity: 0.45;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.continent-btn:disabled:hover,
+.continent-btn:disabled:focus {
+    transform: none;
+    box-shadow: none;
 }
 
 #country {
     width: 100%;
+    max-width: none;
     display: flex;
     justify-content: center;
-    margin: 1rem 0;
+    margin: 1rem 0 0.75rem;
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #111827;
 }
 
 #country-images {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
-    margin: 1rem 0;
+    gap: clamp(0.75rem, 4vw, 1.5rem);
+    margin: 0 auto 1rem;
+    padding: clamp(0.6rem, 3vw, 1rem);
+    box-sizing: border-box;
+    width: min(100%, 28rem);
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border: 1px solid rgba(59, 130, 246, 0.18);
+    border-radius: 1.1rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+/* both images hide when a country has no ISO code -- drop the card chrome so
+   an empty panel is not left behind */
+#country-images:not(:has(img:not([hidden]))) {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 0;
 }
 
 #country-map {
-    width: 12rem;
-    height: 12rem;
+    width: min(12rem, 38vw);
+    height: min(12rem, 38vw);
     object-fit: contain;
 }
 
 #country-flag {
-    width: 8rem;
-    height: 5.3rem;
+    width: min(8rem, 26vw);
+    height: auto;
+    aspect-ratio: 1.5;
     object-fit: contain;
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+    border-radius: 0.3rem;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
 }
 
 #input-div {
-    width: 100%;
+    width: min(100%, 28.75rem);
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin: 1rem auto;
+}
+
+#answer {
+    width: 100%;
+    min-width: 0;
+    font-size: 1.25rem;
+    height: 2.9rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 0.85rem;
+    box-shadow: inset 0 3px 6px rgba(15, 23, 42, 0.16), inset 0 -2px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+#answer:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: inset 0 3px 6px rgba(15, 23, 42, 0.12), 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+#capitals-list {
+    width: 20rem;
+    max-width: calc(100vw - 9rem);
+}
+
+#submit,
+#skip,
+#share {
+    cursor: pointer;
+    height: 2.25rem;
+    color: white;
+    width: 100%;
+    max-width: none;
+    flex: none;
+    border: none;
+    border-radius: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 6px 14px rgba(20, 35, 90, 0.18);
+}
+
+#submit {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+#skip {
+    background: linear-gradient(135deg, #64748b, #94a3b8);
+}
+
+#buttons-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     margin: 1rem 0;
 }
 
+#buttons-div > button {
+    width: 100%;
+    max-width: none;
+}
+
+@media (min-width: 700px) {
+    #buttons-div {
+        flex-direction: row;
+        justify-content: center;
+        max-width: 34rem;
+        margin: 1rem auto;
+    }
+
+    #buttons-div > button {
+        width: min(14rem, 50%);
+        max-width: 14rem;
+    }
+}
+
+#feedback {
+    margin: 0.5rem auto 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    white-space: pre-line;
+}
+
+#feedback:empty {
+    margin: 0;
+}
+
+#score, #progress {
+    width: 100%;
+    max-width: none;
+    display: flex;
+    justify-content: center;
+    /* the flex container collapses the whitespace around the <span>s, so the
+       gap puts the spacing back between "Progress:" and "1 / 201" */
+    gap: 0.35rem;
+    margin: 0.5rem auto;
+}
+
+#share {
+    display: block;
+    width: 20rem;
+    max-width: calc(100vw - 9rem);
+    margin: 1rem auto;
+    padding: 0 1.5rem;
+    background: linear-gradient(135deg, #67e8f9, #22d3ee, #0891b2);
+}
+
 #answers-table {
-    margin-top: 1rem;
+    margin: 1rem auto 0;
     border-collapse: collapse;
 }
 
@@ -84,43 +252,4 @@
 #answers-table tr th, #answers-table tr td {
     border: 1px solid black;
     padding: 0.5rem;
-}
-
-.continent-btn {
-    margin: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.continent-btn.active {
-    background-color: green;
-    color: white;
-}
-
-#feedback {
-    margin-top: 1rem;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-#score, #progress {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0.5rem 0;
-}
-
-#share {
-    display: block;
-    height: 2rem;
-    margin: 1rem auto;
-    padding: 0 1.5rem;
-    color: white;
-    background-color: green;
-    cursor: pointer;
-}
-
-#share[hidden] {
-    display: none;
 }
