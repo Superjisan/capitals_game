@@ -23,11 +23,11 @@ Deno.test('updateCountryFlag falls back to worldflags.net when there is no flagc
   assertEquals(document.getElementById('country-flag').hidden, false);
 });
 
-Deno.test('updateCountryMap hides the map for a country with no known outline', async () => {
+Deno.test('updateCountryMap hides the map for a country it knows nothing about', async () => {
   setupDom();
   const game = await importGame();
   document.getElementById('country-map').hidden = false;
-  game.updateCountryMap('Tuvalu');
+  game.updateCountryMap('Atlantis');
 
   assertEquals(document.getElementById('country-map').hidden, true);
 });
@@ -102,15 +102,28 @@ Deno.test('every map drawn in this repo is on disk and is a single-path svg', as
   }
 });
 
-Deno.test('Palestine and Micronesia draw the maps this repo ships', async () => {
+Deno.test('the countries mapsicon has no map for draw the ones this repo ships', async () => {
   setupDom();
   const game = await importGame();
+  const mapElem = document.getElementById('country-map');
 
-  game.updateCountryMap('Palestine');
-  assertEquals(document.getElementById('country-map').hidden, false);
-  assertMatch(document.getElementById('country-map').src, /maps\/ps\.svg$/);
+  for (const [country, file] of [
+    ['Palestine', 'ps'],
+    ['Federated States of Micronesia', 'fm'],
+    ['Tuvalu', 'tv'],
+    ['Marshall Islands', 'mh'],
+  ]) {
+    mapElem.hidden = true;
+    game.updateCountryMap(country);
+    assertEquals(mapElem.hidden, false, `${country} should show a map`);
+    assertMatch(mapElem.src, new RegExp(`maps/${file}\\.svg$`));
+  }
+});
 
-  game.updateCountryMap('Federated States of Micronesia');
-  assertEquals(document.getElementById('country-map').hidden, false);
-  assertMatch(document.getElementById('country-map').src, /maps\/fm\.svg$/);
+Deno.test('every country in the dataset can draw a map', () => {
+  const mapless = Object.entries(countries)
+    .filter(([, data]) => !data.iso && !data.mapUrl)
+    .map(([country]) => country);
+
+  assertEquals(mapless, [], 'these countries would render with no outline at all');
 });

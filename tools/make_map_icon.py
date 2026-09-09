@@ -78,6 +78,8 @@ def build(geojson, name, out_path, min_span_px=0):
 TARGETS = [
     ('Palestine', 'ps.svg', 0),
     ('Micronesia', 'fm.svg', 100),
+    ('Tuvalu', 'tv.svg', 120),
+    ('Marshall Is.', 'mh.svg', 90),
 ]
 
 if __name__ == '__main__':

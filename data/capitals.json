@@ -798,7 +798,8 @@
             "oceania"
         ],
         "iso": null,
-        "flagSlug": "marshall-islands"
+        "flagSlug": "marshall-islands",
+        "mapUrl": "maps/mh.svg"
     },
     "Mauritania": {
         "capital": "Nouakchott",
@@ -1331,7 +1332,8 @@
             "oceania"
         ],
         "iso": null,
-        "flagSlug": "tuvalu"
+        "flagSlug": "tuvalu",
+        "mapUrl": "maps/tv.svg"
     },
     "Uganda": {
         "capital": "Kampala",

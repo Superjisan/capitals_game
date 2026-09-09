@@ -4,9 +4,9 @@ Covers the country outline icons this repo draws itself, in [maps/](../maps/).  
 
 ## Why any map is drawn here at all
 
-Every other country's outline loads from [mapsicon](https://github.com/djaiss/mapsicon) at `all/<iso>/vector.svg`.  Five countries have no folder there: `fm`, `mh`, `ps`, `tv`, `xk`.  Kosovo (`xk`) is covered by [an upstream PR](https://github.com/djaiss/mapsicon/pull/29) that has been open since 2020, so it loads from the contributor's fork pinned to that PR's commit.  Palestine (`ps`) and Micronesia (`fm`) have no upstream fix, so their outlines are generated from public-domain geometry and committed here.
+Every other country's outline loads from [mapsicon](https://github.com/djaiss/mapsicon) at `all/<iso>/vector.svg`.  Five countries have no folder there: `fm`, `mh`, `ps`, `tv`, `xk`.  Kosovo (`xk`) is covered by [an upstream PR](https://github.com/djaiss/mapsicon/pull/29) that has been open since 2020, so it loads from the contributor's fork pinned to that PR's commit.  The other four have no upstream fix, so their outlines are generated from public-domain geometry and committed here.
 
-Marshall Islands (`mh`) and Tuvalu (`tv`) are still missing.  They render with no map.
+Every country in the dataset now draws a map, and a test in [tests/countryImages.test.js](../tests/countryImages.test.js) fails if one is ever added that cannot.
 
 ## How a country resolves its map
 
@@ -31,6 +31,8 @@ The source is [Natural Earth](https://www.naturalearthdata.com/) 1:10m Admin 0, 
 
 To add a country, append it to `TARGETS` in the script: the Natural Earth `NAME`, the output filename, and the island-growth threshold (0 for anything that is not a scattered archipelago).  Then add its `mapUrl` to [data/capitals.json](../data/capitals.json).
 
+Natural Earth's `NAME` is not always the name this game uses -- it calls the Marshall Islands `Marshall Is.` and the Federated States of Micronesia `Micronesia`.  `TARGETS` takes Natural Earth's spelling; `data/capitals.json` keeps the game's.
+
 ## What the script does
 
 **Picks the outer ring of every part.**  A MultiPolygon becomes one ring per part, so all 20 Micronesian islands survive.  Holes are dropped, matching mapsicon's solid silhouettes.
@@ -39,7 +41,9 @@ To add a country, append it to `TARGETS` in the script: the Natural Earth `NAME`
 
 **Fits to a 1024 square with 32px of padding**, scaling on the longer axis so the aspect ratio holds.
 
-**Grows islands that would otherwise vanish.**  Micronesia's islands are a few km across but spread over 2500km of ocean, so fitted honestly they land at roughly one pixel each and the icon reads as blank.  Each ring smaller than the threshold is scaled about its own centre until it clears it, which keeps every island's true position and shape while making the archipelago legible.  100px was picked by eye against 70 and 130 -- 70 still reads as specks, 130 starts merging neighbours.
+**Grows islands that would otherwise vanish.**  Micronesia's islands are a few km across but spread over 2500km of ocean, so fitted honestly they land at roughly one pixel each and the icon reads as blank.  Each ring smaller than the threshold is scaled about its own centre until it clears it, which keeps every island's true position and shape while making the archipelago legible.
+
+Each threshold was picked by eye from a strip of candidates -- too low and the atolls read as specks, too high and neighbours merge into one blob.  Micronesia 100 (against 70 and 130), Tuvalu 120 (against 60, 90, 150), Marshall Islands 90 (against 50, 70, 120).  Palestine needs none, so it is 0.
 
 **Emits one `<path>`, no `fill`.**  Same as mapsicon: the default black fill is what the game's CSS expects.
 
