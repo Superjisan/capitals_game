@@ -396,7 +396,8 @@
         "capital": "London",
         "continents": ["europe"],
         "iso": "gb",
-        "flagSlug": "england"
+        "flagSlug": "england",
+        "mapUrl": "maps/england.svg"
     },
     "Equatorial Guinea": {
         "capital": "Ciudad de la Paz",
@@ -946,7 +947,8 @@
         "capital": "Belfast",
         "continents": ["europe"],
         "iso": "gb",
-        "flagSlug": "northern-ireland"
+        "flagSlug": "northern-ireland",
+        "mapUrl": "maps/northern-ireland.svg"
     },
     "Norway": {
         "capital": "Oslo",
@@ -1116,7 +1118,8 @@
         "capital": "Edinburgh",
         "continents": ["europe"],
         "iso": "gb",
-        "flagSlug": "scotland"
+        "flagSlug": "scotland",
+        "mapUrl": "maps/scotland.svg"
     },
     "Senegal": {
         "capital": "Dakar",
@@ -1425,7 +1428,8 @@
         "capital": "Cardiff",
         "continents": ["europe"],
         "iso": "gb",
-        "flagSlug": "wales"
+        "flagSlug": "wales",
+        "mapUrl": "maps/wales.svg"
     },
     "Yemen": {
         "capital": "Sanaa",

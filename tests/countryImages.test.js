@@ -23,24 +23,28 @@ Deno.test('updateCountryFlag falls back to worldflags.net when there is no flagc
   assertEquals(document.getElementById('country-flag').hidden, false);
 });
 
-Deno.test('the constituent countries of the United Kingdom fly their own flag over the union flag', async () => {
+Deno.test('the constituent countries of the United Kingdom fly their own flag and draw their own map', async () => {
   setupDom();
   const game = await importGame();
   const flagElem = document.getElementById('country-flag');
+  const mapElem = document.getElementById('country-map');
 
-  for (const [country, slug] of [
-    ['England', 'england'],
-    ['Wales', 'wales'],
-    ['Scotland', 'scotland'],
-    ['Northern Ireland', 'northern-ireland'],
+  for (const [country, slug, file] of [
+    ['England', 'england', 'england'],
+    ['Wales', 'wales', 'wales'],
+    ['Scotland', 'scotland', 'scotland'],
+    ['Northern Ireland', 'northern-ireland', 'northern-ireland'],
   ]) {
     flagElem.hidden = true;
     game.updateCountryFlag(country);
     assertEquals(flagElem.src, `https://worldflags.net/assets/img/flags/${slug}-flag.png`);
     assertEquals(flagElem.hidden, false, `${country} should show a flag`);
 
+    mapElem.hidden = true;
     game.updateCountryMap(country);
-    assertEquals(document.getElementById('country-map').src, 'https://raw.githubusercontent.com/djaiss/mapsicon/master/all/gb/vector.svg');
+    assertMatch(mapElem.src, new RegExp(`maps/${file}\\.svg$`));
+    assertEquals(mapElem.src.includes('djaiss/mapsicon/master'), false, `${country} should not fall back to the UK union outline`);
+    assertEquals(mapElem.hidden, false, `${country} should show a map`);
   }
 });
 

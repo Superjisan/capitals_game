@@ -82,7 +82,21 @@ TARGETS = [
     ('Marshall Is.', 'mh.svg', 90),
 ]
 
+# The UK shares one ISO code across four countries that mapsicon draws as a
+# single union outline.  Admin 0 has no separate entry for any of them --
+# admin_0_map_subunits does, so these come from that file instead.
+SUBUNIT_TARGETS = [
+    ('England', 'england.svg', 0),
+    ('Scotland', 'scotland.svg', 0),
+    ('Wales', 'wales.svg', 0),
+    ('N. Ireland', 'northern-ireland.svg', 0),
+]
+
 if __name__ == '__main__':
     geojson, out_dir = sys.argv[1], sys.argv[2]
     for name, filename, min_span in TARGETS:
         build(geojson, name, f'{out_dir}/{filename}', min_span_px=min_span)
+    if len(sys.argv) > 3:
+        subunits_geojson = sys.argv[3]
+        for name, filename, min_span in SUBUNIT_TARGETS:
+            build(subunits_geojson, name, f'{out_dir}/{filename}', min_span_px=min_span)
