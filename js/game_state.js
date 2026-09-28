@@ -70,7 +70,7 @@ export function getMapOverride(country) {
   return countries[country]?.mapUrl ?? null;
 }
 
-export function getFallbackFlagSlug(country) {
+export function getFlagSlug(country) {
   return countries[country]?.flagSlug ?? null;
 }
 

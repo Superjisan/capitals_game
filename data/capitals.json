@@ -395,7 +395,8 @@
     "England": {
         "capital": "London",
         "continents": [],
-        "iso": "gb"
+        "iso": "gb",
+        "flagSlug": "england"
     },
     "Equatorial Guinea": {
         "capital": "Ciudad de la Paz",
@@ -944,7 +945,8 @@
     "Northern Ireland": {
         "capital": "Belfast",
         "continents": [],
-        "iso": "gb"
+        "iso": "gb",
+        "flagSlug": "northern-ireland"
     },
     "Norway": {
         "capital": "Oslo",
@@ -1113,7 +1115,8 @@
     "Scotland": {
         "capital": "Edinburgh",
         "continents": [],
-        "iso": "gb"
+        "iso": "gb",
+        "flagSlug": "scotland"
     },
     "Senegal": {
         "capital": "Dakar",
@@ -1421,7 +1424,8 @@
     "Wales": {
         "capital": "Cardiff",
         "continents": [],
-        "iso": "gb"
+        "iso": "gb",
+        "flagSlug": "wales"
     },
     "Yemen": {
         "capital": "Sanaa",

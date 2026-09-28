@@ -1,4 +1,4 @@
-import { getCountryIso, getMapOverride, getFallbackFlagSlug } from './game_state.js';
+import { getCountryIso, getMapOverride, getFlagSlug } from './game_state.js';
 
 let visibleImages = 'both';
 
@@ -40,24 +40,23 @@ export function updateCountryMap(country) {
   mapElem.hidden = false;
 }
 
-export function updateCountryFlag(country) {
-  const flagElem = document.getElementById('country-flag');
-  if (!isVisible('flag')) {
-    flagElem.hidden = true;
-    return;
+export function flagUrl(country) {
+  const slug = getFlagSlug(country);
+  if (slug) {
+    return `https://worldflags.net/assets/img/flags/${slug}-flag.png`;
   }
   const isoCode = getCountryIso(country);
-  if (isoCode) {
-    flagElem.src = `https://flagcdn.com/${isoCode}.svg`;
-    flagElem.hidden = false;
-    return;
-  }
-  const fallbackSlug = getFallbackFlagSlug(country);
-  if (!fallbackSlug) {
+  return isoCode ? `https://flagcdn.com/${isoCode}.svg` : null;
+}
+
+export function updateCountryFlag(country) {
+  const flagElem = document.getElementById('country-flag');
+  const source = flagUrl(country);
+  if (!source || !isVisible('flag')) {
     flagElem.hidden = true;
     return;
   }
-  flagElem.src = `https://worldflags.net/assets/img/flags/${fallbackSlug}-flag.png`;
+  flagElem.src = source;
   flagElem.hidden = false;
 }
 
