@@ -394,7 +394,7 @@
     },
     "England": {
         "capital": "London",
-        "continents": [],
+        "continents": ["europe"],
         "iso": "gb",
         "flagSlug": "england"
     },
@@ -944,7 +944,7 @@
     },
     "Northern Ireland": {
         "capital": "Belfast",
-        "continents": [],
+        "continents": ["europe"],
         "iso": "gb",
         "flagSlug": "northern-ireland"
     },
@@ -1114,7 +1114,7 @@
     },
     "Scotland": {
         "capital": "Edinburgh",
-        "continents": [],
+        "continents": ["europe"],
         "iso": "gb",
         "flagSlug": "scotland"
     },
@@ -1423,7 +1423,7 @@
     },
     "Wales": {
         "capital": "Cardiff",
-        "continents": [],
+        "continents": ["europe"],
         "iso": "gb",
         "flagSlug": "wales"
     },
