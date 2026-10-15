@@ -121,7 +121,7 @@ Deno.test('switching continent restarts study at that continent\'s first country
 
   assertEquals(text('country'), 'Albania');
   assertEquals(text('progress-value'), '1');
-  assertEquals(text('total-countries'), '45');
+  assertEquals(text('total-countries'), '49');
   assertEquals(el('study-controls').hidden, false, 'switching continent should stay in study mode');
 });
 

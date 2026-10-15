@@ -32,7 +32,7 @@ export function mapUrl(country) {
 export function updateCountryMap(country) {
   const mapElem = document.getElementById('country-map');
   const source = mapUrl(country);
-  if (!source || !isVisible('map')) {
+  if (!source || navigator.onLine === false || !isVisible('map')) {
     mapElem.hidden = true;
     return;
   }
@@ -52,7 +52,7 @@ export function flagUrl(country) {
 export function updateCountryFlag(country) {
   const flagElem = document.getElementById('country-flag');
   const source = flagUrl(country);
-  if (!source || !isVisible('flag')) {
+  if (!source || navigator.onLine === false || !isVisible('flag')) {
     flagElem.hidden = true;
     return;
   }
@@ -66,5 +66,16 @@ export function registerCountryImageErrorHandlers() {
   });
   document.getElementById('country-flag').addEventListener('error', function () {
     this.hidden = true;
+  });
+  window.addEventListener('offline', () => {
+    document.getElementById('country-map').hidden = true;
+    document.getElementById('country-flag').hidden = true;
+  });
+  window.addEventListener('online', () => {
+    const country = document.getElementById('country').innerText;
+    if (country) {
+      updateCountryMap(country);
+      updateCountryFlag(country);
+    }
   });
 }
