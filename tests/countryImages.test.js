@@ -152,3 +152,22 @@ Deno.test('every country in the dataset can draw a map', () => {
 
   assertEquals(mapless, [], 'these countries would render with no outline at all');
 });
+
+Deno.test('the flag and map stay hidden while offline and return when back online', async () => {
+  setupDom();
+  const game = await importGame();
+  const flagElem = document.getElementById('country-flag');
+  const mapElem = document.getElementById('country-map');
+  Object.defineProperty(globalThis.navigator, 'onLine', { value: false, configurable: true });
+
+  game.updateCountryMap('France');
+  game.updateCountryFlag('France');
+  assertEquals(mapElem.hidden, true);
+  assertEquals(flagElem.hidden, true);
+
+  Object.defineProperty(globalThis.navigator, 'onLine', { value: true, configurable: true });
+  game.updateCountryMap('France');
+  game.updateCountryFlag('France');
+  assertEquals(mapElem.hidden, false);
+  assertEquals(flagElem.hidden, false);
+});
